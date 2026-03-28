@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="bibliotecadb.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3860"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="autor" custom_title="0" dock_id="1" table="4,5:mainautor"/><dock_state state="000000ff00000000fd00000001000000020000033c00000356fc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000011800ffffff000002580000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="autor" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="55"/><column index="2" value="85"/><column index="3" value="117"/><column index="4" value="85"/><column index="5" value="107"/><column index="6" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="categoria" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="78"/><column index="2" value="140"/><column index="3" value="300"/><column index="4" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="editorial" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="72"/><column index="2" value="210"/><column index="3" value="117"/><column index="4" value="280"/><column index="5" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="libro" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="51"/><column index="2" value="265"/><column index="3" value="117"/><column index="4" value="102"/><column index="5" value="83"/><column index="6" value="74"/><column index="7" value="79"/><column index="8" value="65"/><column index="9" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="libro_autor" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="53"/><column index="2" value="57"/><column index="3" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="multa" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="58"/><column index="2" value="80"/><column index="3" value="62"/><column index="4" value="156"/><column index="5" value="85"/><column index="6" value="78"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="sqlite_sequence" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="78"/><column index="2" value="29"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="usuario" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="67"/><column index="2" value="140"/><column index="3" value="109"/><column index="4" value="124"/><column index="5" value="210"/><column index="6" value="85"/><column index="7" value="117"/><column index="8" value="70"/><column index="9" value="156"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">
+-- NOTA DE PORTABILIDAD:
+--   SQLite  → Este archivo funciona tal cual.
+--   MySQL   → Cambiar TEXT por VARCHAR(n), INTEGER PRIMARY KEY
+--             AUTOINCREMENT por INT AUTO_INCREMENT PRIMARY KEY,
+--             añadir ENGINE=InnoDB DEFAULT CHARSET=utf8mb4,
+--             y activar CHECK con MySQL 8.0+.
+--   PostgreSQL → Cambiar INTEGER PRIMARY KEY AUTOINCREMENT por
+--             SERIAL PRIMARY KEY, BOOLEAN soportado nativamente,
+--             TEXT y VARCHAR funcionan igual.
+-- ============================================================
+
+PRAGMA foreign_keys = ON;   -- Habilitar integridad referencial en SQLite
+
+-- ============================================================
+-- 1. EDITORIAL
+-- ============================================================
+CREATE TABLE IF NOT EXISTS editorial (
+    id_editorial  INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre        TEXT    NOT NULL,
+    pais          TEXT,
+    sitio_web     TEXT
+);
+
+-- ============================================================
+-- 2. CATEGORIA
+-- ============================================================
+CREATE TABLE IF NOT EXISTS categoria (
+    id_categoria  INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre        TEXT    NOT NULL,
+    descripcion   TEXT
+);
+
+-- ============================================================
+-- 3. AUTOR
+-- ============================================================
+CREATE TABLE IF NOT EXISTS autor (
+    id_autor          INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombres           TEXT    NOT NULL,
+    apellidos         TEXT    NOT NULL,
+    nacionalidad      TEXT,
+    fecha_nacimiento  TEXT    -- formato ISO: YYYY-MM-DD
+);
+
+-- ============================================================
+-- 4. USUARIO
+-- ============================================================
+CREATE TABLE IF NOT EXISTS usuario (
+    id_usuario    INTEGER PRIMARY KEY AUTOINCREMENT,
+    documento     TEXT    NOT NULL UNIQUE,
+    nombres       TEXT    NOT NULL,
+    apellidos     TEXT    NOT NULL,
+    email         TEXT    NOT NULL UNIQUE,
+    telefono      TEXT,
+    -- tipo_usuario: 'admin' | 'lector'
+    tipo_usuario  TEXT    NOT NULL DEFAULT 'lector'
+                          CHECK (tipo_usuario IN ('admin', 'lector')),
+    -- estado: 'activo' | 'inactivo' | 'suspendido'
+    estado        TEXT    NOT NULL DEFAULT 'activo'
+                          CHECK (estado IN ('activo', 'inactivo', 'suspendido'))
+);
+
+-- ============================================================
+-- 5. LIBRO
+--    disponible se maneja como VARCHAR para enum en el código:
+--    'disponible' | 'prestado' | 'mantenimiento' | 'dado_de_baja'
+-- ============================================================
+CREATE TABLE IF NOT EXISTS libro (
+    id_libro          INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo            TEXT    NOT NULL,
+    isbn              TEXT    UNIQUE,
+    anio_publicacion  INTEGER,
+    num_paginas       INTEGER CHECK (num_paginas &gt; 0),
+    id_editorial      INTEGER,
+    id_categoria      INTEGER,
+    -- Estado del libro manejado como enum en el código
+    estado            TEXT    NOT NULL DEFAULT 'disponible'
+                              CHECK (estado IN ('disponible', 'prestado',
+                                                'mantenimiento', 'dado_de_baja')),
+    FOREIGN KEY (id_editorial) REFERENCES editorial(id_editorial)
+        ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+        ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+-- ============================================================
+-- 6. LIBRO_AUTOR  (tabla intermedia N:M)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS libro_autor (
+    id_libro   INTEGER NOT NULL,
+    id_autor   INTEGER NOT NULL,
+    PRIMARY KEY (id_libro, id_autor),
+    FOREIGN KEY (id_libro) REFERENCES libro(id_libro)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (id_autor) REFERENCES autor(id_autor)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- ============================================================
+-- 7. PRESTAMO
+-- ============================================================
+CREATE TABLE IF NOT EXISTS prestamo (
+    id_prestamo               INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_libro                  INTEGER NOT NULL,
+    id_usuario                INTEGER NOT NULL,
+    fecha_prestamo            TEXT    NOT NULL DEFAULT (DATE('now')), -- YYYY-MM-DD
+    fecha_devolucion_esperada TEXT    NOT NULL,
+    fecha_devolucion_real     TEXT,   -- NULL mientras no se devuelva
+    -- estado: 'activo' | 'devuelto' | 'vencido'
+    estado                    TEXT    NOT NULL DEFAULT 'activo'
+                                      CHECK (estado IN ('activo', 'devuelto', 'vencido')),
+    FOREIGN KEY (id_libro)   REFERENCES libro(id_libro)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- ============================================================
+-- 8. MULTA
+-- ============================================================
+CREATE TABLE IF NOT EXISTS multa (
+    id_multa          INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_prestamo       INTEGER NOT NULL UNIQUE,  -- 1 multa por préstamo
+    monto             REAL    NOT NULL CHECK (monto &gt;= 0),
+    fecha_generacion  TEXT    NOT NULL DEFAULT (DATE('now')),
+    fecha_pago        TEXT,   -- NULL mientras no se pague
+    -- estado: 'pendiente' | 'pagada' | 'exonerada'
+    estado            TEXT    NOT NULL DEFAULT 'pendiente'
+                              CHECK (estado IN ('pendiente', 'pagada', 'exonerada')),
+    FOREIGN KEY (id_prestamo) REFERENCES prestamo(id_prestamo)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- ============================================================
+-- ÍNDICES  (mejoran rendimiento en consultas frecuentes)
+-- ============================================================
+CREATE INDEX IF NOT EXISTS idx_libro_titulo       ON libro(titulo);
+CREATE INDEX IF NOT EXISTS idx_libro_isbn         ON libro(isbn);
+CREATE INDEX IF NOT EXISTS idx_libro_estado       ON libro(estado);
+CREATE INDEX IF NOT EXISTS idx_usuario_documento  ON usuario(documento);
+CREATE INDEX IF NOT EXISTS idx_usuario_email      ON usuario(email);
+CREATE INDEX IF NOT EXISTS idx_prestamo_estado    ON prestamo(estado);
+CREATE INDEX IF NOT EXISTS idx_prestamo_usuario   ON prestamo(id_usuario);
+CREATE INDEX IF NOT EXISTS idx_prestamo_libro     ON prestamo(id_libro);
+CREATE INDEX IF NOT EXISTS idx_multa_estado       ON multa(estado);
+
+-- ============================================================
+-- DATOS DE PRUEBA
+-- ============================================================
+
+-- Editoriales
+INSERT INTO editorial (nombre, pais, sitio_web) VALUES
+    ('McGraw-Hill',         'Estados Unidos', 'https://www.mheducation.com'),
+    ('Pearson',             'Reino Unido',    'https://www.pearson.com'),
+    ('O''Reilly Media',     'Estados Unidos', 'https://www.oreilly.com'),
+    ('Alfaomega',           'México',         'https://www.alfaomega.com.mx'),
+    ('Santillana',          'España',         'https://www.santillana.com'),
+    ('Ediciones de la U',   'Colombia',       'https://www.edicionesdelau.com');
+
+-- Categorías
+INSERT INTO categoria (nombre, descripcion) VALUES
+    ('Bases de Datos',     'Libros sobre diseño, administración y consulta de BD'),
+    ('Programación Java',  'Libros sobre el lenguaje de programación Java'),
+    ('Ingeniería de SW',   'Metodologías y prácticas de desarrollo de software'),
+    ('Redes',              'Redes de computadores y telecomunicaciones'),
+    ('Sistemas Operativos','Teoría y administración de sistemas operativos'),
+    ('Matemáticas',        'Matemáticas aplicadas a la computación');
+
+-- Autores
+INSERT INTO autor (nombres, apellidos, nacionalidad, fecha_nacimiento) VALUES
+    ('Abraham',  'Silberschatz',  'Estadounidense', '1952-01-01'),
+    ('Henry F.', 'Korth',         'Estadounidense', '1956-01-01'),
+    ('Ramez',    'Elmasri',       'Estadounidense', '1950-01-01'),
+    ('Shamkant', 'Navathe',       'Indio',          '1947-01-01'),
+    ('James',    'Gosling',       'Canadiense',     '1955-05-19'),
+    ('Herbert',  'Schildt',       'Estadounidense', '1952-01-01'),
+    ('C. J.',    'Date',          'Británico',      '1941-07-23'),
+    ('Joel',     'Murach',        'Estadounidense', '1970-01-01'),
+    ('Andrew',   'Tanenbaum',     'Estadounidense', '1944-03-16'),
+    ('Robert C.','Martin',        'Estadounidense', '1952-12-05');
+
+-- Libros
+INSERT INTO libro (titulo, isbn, anio_publicacion, num_paginas, id_editorial, id_categoria, estado) VALUES
+    ('Database System Concepts',            '978-0078022159', 2019, 1376, 1, 1, 'disponible'),
+    ('Fundamentals of Database Systems',    '978-0133970777', 2015, 1280, 2, 1, 'disponible'),
+    ('SQL and Relational Theory',           '978-1491941171', 2019,  404, 3, 1, 'prestado'),
+    ('Murach''s MySQL',                     '978-1943872367', 2019,  560, 3, 1, 'disponible'),
+    ('Java: The Complete Reference',        '978-1260440249', 2021, 1248, 1, 2, 'disponible'),
+    ('Effective Java',                      '978-0134685991', 2018,  412, 2, 2, 'disponible'),
+    ('Clean Code',                          '978-0132350884', 2008,  431, 2, 3, 'disponible'),
+    ('The Pragmatic Programmer',            '978-0135957059', 2019,  352, 2, 3, 'disponible'),
+    ('Computer Networks',                   '978-0132126953', 2010,  960, 2, 4, 'mantenimiento'),
+    ('Modern Operating Systems',            '978-0133591620', 2014, 1136, 2, 5, 'disponible'),
+    ('Introducción a las Bases de Datos',   '978-9587786423', 2020,  480, 6, 1, 'disponible'),
+    ('Programación en Java para Ingeniería','978-9587786140', 2018,  620, 6, 2, 'disponible'),
+    ('Matemáticas Discretas',               '978-9702608448', 2016,  700, 4, 6, 'disponible'),
+    ('Arquitectura de Software',            '978-9587783001', 2021,  390, 6, 3, 'disponible'),
+    ('Diseño de Bases de Datos Relacionales','978-9587780001',2019,  450, 6, 1, 'disponible');
+
+-- Libro-Autor (relaciones N:M)
+INSERT INTO libro_autor (id_libro, id_autor) VALUES
+    (1, 1), (1, 2),   -- Database System Concepts: Silberschatz, Korth
+    (2, 3), (2, 4),   -- Fundamentals: Elmasri, Navathe
+    (3, 7),           -- SQL and Relational Theory: Date
+    (4, 8),           -- Murach's MySQL: Murach
+    (5, 6),           -- Java Complete Reference: Schildt
+    (6, 5),           -- Effective Java: Gosling
+    (7, 10),          -- Clean Code: Martin
+    (8, 10),          -- Pragmatic Programmer: Martin
+    (9, 9),           -- Computer Networks: Tanenbaum
+    (10, 9),          -- Modern Operating Systems: Tanenbaum
+    (11, 1),          -- Introducción BD: Silberschatz
+    (12, 6),          -- Programación Java: Gosling
+    (13, 4),          -- Matemáticas Discretas: Navathe
+    (14, 10),         -- Arquitectura: Martin
+    (15, 3);          -- Diseño BD: Elmasri
+
+-- Usuarios
+INSERT INTO usuario (documento, nombres, apellidos, email, telefono, tipo_usuario, estado) VALUES
+    ('1000001', 'Ana',       'García López',     'ana.garcia@uregional.edu.co',     '3101234567', 'lector', 'activo'),
+    ('1000002', 'Carlos',    'Martínez Ruiz',    'carlos.martinez@uregional.edu.co','3112345678', 'lector', 'activo'),
+    ('1000003', 'Luisa',     'Pérez Mora',       'luisa.perez@uregional.edu.co',    '3123456789', 'lector', 'activo'),
+    ('1000004', 'Juan',      'Rodríguez Silva',  'juan.rodriguez@uregional.edu.co', '3134567890', 'lector', 'activo'),
+    ('1000005', 'María',     'Torres Cárdenas',  'maria.torres@uregional.edu.co',   '3145678901', 'lector', 'activo'),
+    ('1000006', 'Andrés',    'Vargas Pinto',     'andres.vargas@uregional.edu.co',  '3156789012', 'lector', 'suspendido'),
+    ('1000007', 'Valentina', 'Ospina Díaz',      'valentina.ospina@uregional.edu.co','3167890123','lector', 'activo'),
+    ('1000008', 'Felipe',    'Herrera Cano',     'felipe.herrera@uregional.edu.co', '3178901234', 'lector', 'activo'),
+    ('1000009', 'Laura',     'Castro Niño',      'laura.castro@uregional.edu.co',   '3189012345', 'lector', 'inactivo'),
+    ('1000010', 'Sergio',    'Morales Bernal',   'sergio.morales@uregional.edu.co', '3190123456', 'lector', 'activo'),
+    ('2000001', 'Diana',     'Ramírez Forero',   'diana.ramirez@uregional.edu.co',  '3201234567', 'lector', 'activo'),
+    ('2000002', 'Pablo',     'Suárez Gómez',     'pablo.suarez@uregional.edu.co',   '3212345678', 'lector', 'activo'),
+    ('2000003', 'Catalina',  'Mendoza Parra',    'catalina.mendoza@uregional.edu.co','3223456789','lector', 'activo'),
+    ('2000004', 'Esteban',   'Ríos Castellanos', 'esteban.rios@uregional.edu.co',   '3234567890', 'lector', 'activo'),
+    ('2000005', 'Isabella',  'Cano Quintero',    'isabella.cano@uregional.edu.co',  '3245678901', 'lector', 'activo'),
+    ('2000006', 'Miguel',    'Lozano Arango',    'miguel.lozano@uregional.edu.co',  '3256789012', 'lector', 'activo'),
+    ('2000007', 'Sofía',     'Pineda Agudelo',   'sofia.pineda@uregional.edu.co',   '3267890123', 'lector', 'activo'),
+    ('2000008', 'Daniel',    'Acosta Bermúdez',  'daniel.acosta@uregional.edu.co',  '3278901234', 'lector', 'activo'),
+    ('2000009', 'Natalia',   'Betancourt Vera',  'natalia.betancourt@uregional.edu.co','3289012345','lector','activo'),
+    ('9000001', 'Osman',     'Aranguren Escobar','admin.biblioteca@uregional.edu.co','3001111111', 'admin',  'activo');
+
+-- Préstamos (incluye activos, devueltos y vencidos)
+INSERT INTO prestamo (id_libro, id_usuario, fecha_prestamo, fecha_devolucion_esperada, fecha_devolucion_real, estado) VALUES
+    (3,  1,  '2026-03-01', '2026-03-15', NULL,         'activo'),    -- libro 3 prestado a Ana
+    (5,  2,  '2026-03-05', '2026-03-19', NULL,         'activo'),
+    (7,  3,  '2026-02-10', '2026-02-24', '2026-02-23', 'devuelto'),
+    (8,  4,  '2026-02-15', '2026-03-01', '2026-03-02', 'devuelto'),
+    (1,  5,  '2026-01-20', '2026-02-03', '2026-02-03', 'devuelto'),
+    (2,  6,  '2026-01-10', '2026-01-24', NULL,         'vencido'),   -- suspendido por vencido
+    (6,  7,  '2026-03-10', '2026-03-24', NULL,         'activo'),
+    (10, 8,  '2026-03-12', '2026-03-26', NULL,         'activo'),
+    (4,  10, '2026-02-20', '2026-03-06', '2026-03-05', 'devuelto'),
+    (11, 11, '2026-03-15', '2026-03-29', NULL,         'activo'),
+    (12, 12, '2026-02-01', '2026-02-15', '2026-02-14', 'devuelto'),
+    (13, 13, '2026-03-18', '2026-04-01', NULL,         'activo'),
+    (14, 14, '2026-01-05', '2026-01-19', '2026-01-20', 'devuelto'),
+    (15, 15, '2026-03-20', '2026-04-03', NULL,         'activo'),
+    (1,  16, '2026-02-25', '2026-03-11', '2026-03-11', 'devuelto'),
+    (7,  17, '2026-03-22', '2026-04-05', NULL,         'activo'),
+    (6,  18, '2026-02-10', '2026-02-24', '2026-02-25', 'devuelto'),
+    (5,  19, '2026-01-15', '2026-01-29', '2026-01-30', 'devuelto'),
+    (2,  20, '2026-03-01', '2026-03-15', NULL,         'activo'),
+    (8,  1,  '2026-01-10', '2026-01-24', '2026-01-24', 'devuelto');
+
+-- Multas (préstamos devueltos tarde o vencidos)
+INSERT INTO multa (id_prestamo, monto, fecha_generacion, fecha_pago, estado) VALUES
+    (4,  2000.00,  '2026-03-02', '2026-03-05', 'pagada'),     -- devuelto 1 día tarde
+    (6,  15000.00, '2026-01-25', NULL,          'pendiente'),  -- vencido, sin pagar
+    (13, 1000.00,  '2026-01-20', '2026-01-22', 'pagada'),     -- devuelto 1 día tarde
+    (17, 2000.00,  '2026-02-25', NULL,          'exonerada'),  -- devuelto 1 día tarde, exonerada
+    (18, 1000.00,  '2026-01-30', '2026-02-01', 'pagada');     -- devuelto 1 día tarde
+
+-- ============================================================
+-- VISTAS útiles para consultas frecuentes
+-- ============================================================
+
+-- Vista: libros con editorial y categoría
+CREATE VIEW IF NOT EXISTS v_libros_detalle AS
+SELECT
+    l.id_libro,
+    l.titulo,
+    l.isbn,
+    l.anio_publicacion,
+    l.num_paginas,
+    l.estado,
+    e.nombre  AS editorial,
+    c.nombre  AS categoria
+FROM libro l
+LEFT JOIN editorial e ON l.id_editorial = e.id_editorial
+LEFT JOIN categoria c ON l.id_categoria = c.id_categoria;
+
+-- Vista: préstamos activos con datos del libro y usuario
+CREATE VIEW IF NOT EXISTS v_prestamos_activos AS
+SELECT
+    p.id_prestamo,
+    l.titulo                      AS libro,
+    u.nombres || ' ' || u.apellidos AS usuario,
+    u.email,
+    p.fecha_prestamo,
+    p.fecha_devolucion_esperada,
+    p.estado
+FROM prestamo p
+JOIN libro   l ON p.id_libro   = l.id_libro
+JOIN usuario u ON p.id_usuario = u.id_usuario
+WHERE p.estado = 'activo';
+
+-- Vista: multas pendientes con datos del usuario
+CREATE VIEW IF NOT EXISTS v_multas_pendientes AS
+SELECT
+    m.id_multa,
+    u.nombres || ' ' || u.apellidos AS usuario,
+    u.email,
+    l.titulo                        AS libro,
+    m.monto,
+    m.fecha_generacion,
+    m.estado                        AS estado_multa
+FROM multa m
+JOIN prestamo p ON m.id_prestamo = p.id_prestamo
+JOIN usuario  u ON p.id_usuario  = u.id_usuario
+JOIN libro    l ON p.id_libro    = l.id_libro
+WHERE m.estado = 'pendiente';
+
+-- ============================================================
+-- FIN DEL SCRIPT
+-- ============================================================</sql><current_tab id="0"/></tab_sql></sqlb_project>
