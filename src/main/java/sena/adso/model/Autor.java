@@ -1,12 +1,14 @@
 package sena.adso.model;
 
+import java.time.LocalDate;
+
 public class Autor {
 
     private int id;
     private String nombres;
     private String apellidos;
     private String nacionalidad;
-    private String fechaNacimiento; // formato ISO: YYYY-MM-DD
+    private LocalDate fechaNacimiento; // formato ISO: YYYY-MM-DD
 
     public Autor() {
     }
@@ -25,7 +27,7 @@ public class Autor {
         private String nombres;
         private String apellidos;
         private String nacionalidad;
-        private String fechaNacimiento;
+        private LocalDate fechaNacimiento;
 
         public Builder id(int id) {
             this.id = id;
@@ -47,7 +49,7 @@ public class Autor {
             return this;
         }
 
-        public Builder fechaNacimiento(String fechaNac) {
+        public Builder fechaNacimiento(LocalDate fechaNac) {
             this.fechaNacimiento = fechaNac;
             return this;
         }
@@ -84,7 +86,7 @@ public class Autor {
         return nacionalidad;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -105,7 +107,7 @@ public class Autor {
         this.nacionalidad = nacionalidad;
     }
 
-    public void setFechaNacimiento(String fechaNac) {
+    public void setFechaNacimiento(LocalDate fechaNac) {
         this.fechaNacimiento = fechaNac;
     }
 }

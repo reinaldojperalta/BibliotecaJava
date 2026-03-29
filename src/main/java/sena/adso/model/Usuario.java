@@ -20,6 +20,7 @@ public class Usuario {
     private Usuario(Builder builder) {
         this.id = builder.id;
         this.documento = builder.documento;
+        this.password = builder.password;
         this.nombres = builder.nombres;
         this.apellidos = builder.apellidos;
         this.email = builder.email;

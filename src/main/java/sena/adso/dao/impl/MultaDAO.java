@@ -1,15 +1,19 @@
 package sena.adso.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import sena.adso.dao.IMultaDAO;
 import sena.adso.model.Multa;
 import sena.adso.model.enums.EstadoMulta;
 import sena.adso.util.ConexionFactory;
+import sena.adso.util.FechaHelper;
 import sena.adso.util.IConexion;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class MultaDAO implements IMultaDAO {
 
@@ -60,8 +64,8 @@ public class MultaDAO implements IMultaDAO {
 
             ps.setInt(1, multa.getIdPrestamo());
             ps.setDouble(2, multa.getMonto());
-            ps.setObject(3, multa.getFechaGeneracion());
-            ps.setObject(4, multa.getFechaPago()); // puede ser null
+            FechaHelper.escribir(ps, 3, multa.getFechaGeneracion());
+            FechaHelper.escribir(ps, 4, multa.getFechaPago()); // puede ser null
             ps.setString(5, multa.getEstado().toDb());
 
             return ps.executeUpdate() > 0;
@@ -79,8 +83,8 @@ public class MultaDAO implements IMultaDAO {
 
             ps.setInt(1, multa.getIdPrestamo());
             ps.setDouble(2, multa.getMonto());
-            ps.setString(3, multa.getFechaGeneracion());
-            ps.setString(4, multa.getFechaPago()); // puede ser null
+            FechaHelper.escribir(ps, 3, multa.getFechaGeneracion());
+            FechaHelper.escribir(ps, 4, multa.getFechaPago()); // puede ser null
             ps.setString(5, multa.getEstado().toDb());
             ps.setInt(6, multa.getId());
 
@@ -205,8 +209,8 @@ public class MultaDAO implements IMultaDAO {
                 .id(rs.getInt("id_multa"))
                 .idPrestamo(rs.getInt("id_prestamo"))
                 .monto(rs.getDouble("monto"))
-                .fechaGeneracion(rs.getString("fecha_generacion"))
-                .fechaPago(rs.getString("fecha_pago")) // puede ser null
+                .fechaGeneracion(FechaHelper.leer(rs, "fecha_generacion"))
+                .fechaPago(FechaHelper.leer(rs, "fecha_pago")) // puede ser null
                 .estado(EstadoMulta.fromDb(rs.getString("estado")))
                 .build();
     }

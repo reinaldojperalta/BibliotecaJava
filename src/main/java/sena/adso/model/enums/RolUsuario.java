@@ -5,7 +5,7 @@ public enum RolUsuario {
     BIBLIOTECARIO,
     ESTUDIANTE;
 
-        /** Convierte el TEXT de SQLite al enum correspondiente. */
+    /** Convierte el TEXT de SQLite al enum correspondiente. */
     public static RolUsuario fromDb(String valor) {
         return switch (valor.toLowerCase()) {
             case "admin" -> ADMINISTRADOR;
@@ -19,5 +19,4 @@ public enum RolUsuario {
     public String toDb() {
         return this.name().toLowerCase();
     }
-}
 }

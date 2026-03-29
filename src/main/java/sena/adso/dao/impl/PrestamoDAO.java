@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +12,7 @@ import sena.adso.dao.IPrestamoDAO;
 import sena.adso.model.Prestamo;
 import sena.adso.model.enums.EstadoPrestamo;
 import sena.adso.util.ConexionFactory;
+import sena.adso.util.FechaHelper;
 import sena.adso.util.IConexion;
 
 public class PrestamoDAO implements IPrestamoDAO {
@@ -64,9 +64,9 @@ public class PrestamoDAO implements IPrestamoDAO {
 
             ps.setInt(1, prestamo.getIdLibro());
             ps.setInt(2, prestamo.getIdUsuario());
-            ps.setObject(3, prestamo.getFechaPrestamo());
-            ps.setObject(4, prestamo.getFechaDevolucionEsperada());
-            ps.setObject(5, prestamo.getFechaDevolucionReal()); // puede ser null
+            FechaHelper.escribir(ps, 3, prestamo.getFechaPrestamo());
+            FechaHelper.escribir(ps, 4, prestamo.getFechaDevolucionEsperada());
+            FechaHelper.escribir(ps, 5, prestamo.getFechaDevolucionReal()); // puede ser null
             ps.setString(6, prestamo.getEstado().toDb());
 
             return ps.executeUpdate() > 0;
@@ -84,9 +84,9 @@ public class PrestamoDAO implements IPrestamoDAO {
 
             ps.setInt(1, prestamo.getIdLibro());
             ps.setInt(2, prestamo.getIdUsuario());
-            ps.setObject(3, prestamo.getFechaPrestamo());
-            ps.setObject(4, prestamo.getFechaDevolucionEsperada());
-            ps.setObject(5, prestamo.getFechaDevolucionReal()); // puede ser null
+            FechaHelper.escribir(ps, 3, prestamo.getFechaPrestamo());
+            FechaHelper.escribir(ps, 4, prestamo.getFechaDevolucionEsperada());
+            FechaHelper.escribir(ps, 5, prestamo.getFechaDevolucionReal()); // puede ser null
             ps.setObject(6, prestamo.getEstado().toDb());
             ps.setInt(7, prestamo.getId());
 
@@ -228,9 +228,9 @@ public class PrestamoDAO implements IPrestamoDAO {
                 .id(rs.getInt("id_prestamo"))
                 .idLibro(rs.getInt("id_libro"))
                 .idUsuario(rs.getInt("id_usuario"))
-                .fechaPrestamo(rs.getObject("fecha_prestamo", LocalDate.class))
-                .fechaDevolucionEsperada(rs.getObject("fecha_devolucion_esperada", LocalDate.class))
-                .fechaDevolucionReal(rs.getObject("fecha_devolucion_real", LocalDate.class)) // puede ser null
+                .fechaPrestamo(FechaHelper.leer(rs, "fecha_prestamo"))
+                .fechaDevolucionEsperada(FechaHelper.leer(rs, "fecha_devolucion_esperada"))
+                .fechaDevolucionReal(FechaHelper.leer(rs, "fecha_devolucion_real")) // puede ser null
                 .estado(EstadoPrestamo.fromDb(rs.getString("estado")))
                 .build();
     }
