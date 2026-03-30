@@ -3,14 +3,14 @@ package sena.adso.model.enums;
 public enum RolUsuario {
     ADMINISTRADOR,
     BIBLIOTECARIO,
-    ESTUDIANTE;
+    LECTOR;
 
     /** Convierte el TEXT de SQLite al enum correspondiente. */
     public static RolUsuario fromDb(String valor) {
         return switch (valor.toLowerCase()) {
             case "admin" -> ADMINISTRADOR;
-            case "usuario" -> BIBLIOTECARIO;
-            case "lector" -> ESTUDIANTE;
+            case "bibliotecario" -> BIBLIOTECARIO;
+            case "lector" -> LECTOR;
             default -> throw new IllegalArgumentException("EstadoLibro desconocido: " + valor);
         };
     }

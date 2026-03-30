@@ -60,7 +60,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.setString(5, usuario.getTelefono());
             ps.setString(6, usuario.getRol().toDb());
             ps.setString(7, usuario.getEstado().toDb());
-            ps.setString(8, usuario.getPassword());
+            ps.setString(8, usuario.getCedula());
 
             return ps.executeUpdate() > 0;
 

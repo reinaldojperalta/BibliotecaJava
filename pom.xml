@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.44.1.0</version>
+            <version>3.45.1.0</version>
         </dependency>
         <!--
         <dependency>
@@ -72,6 +72,15 @@
                 <version>3.11.0</version>
                 <configuration>
                     <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/</path>
+                    <port>8080</port>
                 </configuration>
             </plugin>
             <plugin>
