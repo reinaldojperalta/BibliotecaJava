@@ -19,7 +19,7 @@ public class LibroDAO implements ILibroDAO {
     private final IConexion conexion;
 
     public LibroDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public LibroDAO(IConexion conexion) {

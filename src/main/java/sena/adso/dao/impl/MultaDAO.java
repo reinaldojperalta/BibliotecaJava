@@ -20,7 +20,7 @@ public class MultaDAO implements IMultaDAO {
     private final IConexion conexion;
 
     public MultaDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public MultaDAO(IConexion conexion) {

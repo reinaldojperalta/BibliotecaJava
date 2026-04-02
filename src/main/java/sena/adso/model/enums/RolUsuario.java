@@ -17,6 +17,10 @@ public enum RolUsuario {
 
     /** Devuelve el string exacto que se guarda en la BD. */
     public String toDb() {
-        return this.name().toLowerCase();
+        return switch (this) {
+            case ADMINISTRADOR -> "admin";
+            case BIBLIOTECARIO -> "bibliotecario";
+            case LECTOR -> "lector";
+        };
     }
 }

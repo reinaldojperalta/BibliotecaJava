@@ -69,11 +69,11 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("usuarioActivo", usuario);
             session.setMaxInactiveInterval(30 * 60); // 30 minutos
 
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp");
+            res.sendRedirect(req.getContextPath() + "/resumen");
         } else {
             System.out.println("Login fallido: No se encontró el usuario con esas credenciales.");
             req.setAttribute("error", "Credenciales incorrectas o usuario inactivo");
-            req.getRequestDispatcher("/login.jsp").forward(req, res);
+            res.sendRedirect(req.getContextPath() + "/login?error=credenciales_invalidas");
         }
     }
 

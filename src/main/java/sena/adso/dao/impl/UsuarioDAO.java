@@ -24,7 +24,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     /** Uso normal: new UsuarioDAO("sqlite") | "mysql" | "postgres" */
     public UsuarioDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     /** Constructor alternativo que recibe un IConexion directo (útil para tests) */

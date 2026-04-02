@@ -18,7 +18,7 @@ public class CategoriaDAO implements ICategoriaDAO {
     private final IConexion conexion;
 
     public CategoriaDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion(motorDB);
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public CategoriaDAO(IConexion conexion) {

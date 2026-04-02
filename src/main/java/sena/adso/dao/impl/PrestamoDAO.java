@@ -20,7 +20,7 @@ public class PrestamoDAO implements IPrestamoDAO {
     private final IConexion conexion;
 
     public PrestamoDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public PrestamoDAO(IConexion conexion) {

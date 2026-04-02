@@ -19,7 +19,7 @@ public class AutorDAO implements IAutorDAO {
     private final IConexion conexion;
 
     public AutorDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public AutorDAO(IConexion conexion) {

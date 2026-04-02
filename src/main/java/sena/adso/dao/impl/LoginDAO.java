@@ -21,7 +21,7 @@ public class LoginDAO implements ILoginDAO {
     private final IConexion conexion;
 
     public LoginDAO(String motorDB) {
-        this.conexion = ConexionFactory.getConexion("sqlite");
+        this.conexion = ConexionFactory.getConexion("mysql");
     }
 
     public LoginDAO(IConexion conexion) {

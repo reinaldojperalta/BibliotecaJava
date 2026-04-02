@@ -17,7 +17,7 @@
 <div class="caja">
     <h2>Biblioteca SENA</h2>
 
-    <% if (request.getAttribute("error") != null) { %>
+    <% if (request.getParameter("error") != null) { %>
         <p class="error">${error}</p>
     <% } %>
 
