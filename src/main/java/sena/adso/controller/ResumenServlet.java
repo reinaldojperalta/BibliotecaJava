@@ -22,11 +22,13 @@ public class ResumenServlet extends HttpServlet {
 
     private IPrestamoDAO prestamoDAO;
     private IMultaDAO multaDAO;
+    private String folder;
 
     @Override
     public void init() {
-        prestamoDAO = new PrestamoDAO("sqlite");
-        multaDAO = new MultaDAO("sqlite");
+        prestamoDAO = new PrestamoDAO("mysql");
+        multaDAO = new MultaDAO("mysql");
+        this.folder = getServletContext().getInitParameter("vistasPath");
     }
 
     @Override
@@ -57,6 +59,6 @@ public class ResumenServlet extends HttpServlet {
         }
 
         req.setAttribute("rol", rol.name());
-        req.getRequestDispatcher("/resumen.jsp").forward(req, res);
+        req.getRequestDispatcher(folder + "resumen.jsp").forward(req, res);
     }
 }

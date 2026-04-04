@@ -27,10 +27,7 @@ import sena.adso.model.enums.RolUsuario;
 public class SesionFilter implements Filter {
 
     // Rutas que no requieren sesión
-    private static final String[] RUTAS_PUBLICAS = {
-            "/login", "/login.jsp", "/index.jsp"
-    };
-
+    private static final String[] RUTAS_PUBLICAS = { "/login" };
     // Rutas exclusivas de ADMIN
     private static final String[] RUTAS_ADMIN = {
             "/dashboard", "/DashboardServlet"
@@ -41,6 +38,8 @@ public class SesionFilter implements Filter {
             "/UsuarioServlet"
     };
 
+    private static final String[] EXTENSIONES_ESTATICAS = { ".css", ".js", ".png", ".jpg", ".svg", ".ico" };
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -48,40 +47,52 @@ public class SesionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-
         String ruta = req.getServletPath();
 
-        // 1 — Dejar pasar rutas públicas siempre
+        // 1. Dejar pasar recursos estáticos (Tailwind, imágenes)
+        if (esRecursoEstatico(ruta)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 2. Dejar pasar rutas públicas
         if (esRutaPublica(ruta)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // 2 — Sin sesión → login
+        // 3. Sin sesión -> Redirigir a la URL del Servlet de login
         if (session == null || session.getAttribute("usuarioActivo") == null) {
-            res.sendRedirect(req.getContextPath() + "/login.jsp");
+            res.sendRedirect(req.getContextPath() + "/login"); // Sin .jsp
             return;
         }
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioActivo");
         RolUsuario rol = usuario.getRol();
 
-        // 3 — Ruta exclusiva ADMIN
+        // 4. Protección de rutas por Rol
+        // Redirigir a /resumen (la URL del servlet), no al archivo físico
         if (esRuta(ruta, RUTAS_ADMIN) && rol != RolUsuario.ADMINISTRADOR) {
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp?error=acceso_denegado");
+            res.sendRedirect(req.getContextPath() + "/resumen?error=acceso_denegado");
             return;
         }
 
-        // 4 — Ruta exclusiva ADMIN o BIBLIOTECARIO
         if (esRuta(ruta, RUTAS_ADMIN_BIBLIOTECARIO)
                 && rol != RolUsuario.ADMINISTRADOR
                 && rol != RolUsuario.BIBLIOTECARIO) {
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp?error=acceso_denegado");
+            res.sendRedirect(req.getContextPath() + "/resumen?error=acceso_denegado");
             return;
         }
 
-        // 5 — Sesión válida y rol permitido → continuar
         chain.doFilter(request, response);
+    }
+
+    private boolean esRecursoEstatico(String ruta) {
+        for (String ext : EXTENSIONES_ESTATICAS) {
+            if (ruta.toLowerCase().endsWith(ext))
+                return true;
+        }
+        return false;
     }
 
     // -------------------------------------------------------------------------

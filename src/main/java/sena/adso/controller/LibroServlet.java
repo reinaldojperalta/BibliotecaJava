@@ -32,13 +32,15 @@ public class LibroServlet extends HttpServlet {
     private IPrestamoDAO prestamoDAO;
     private IEditorialDAO editorialDAO;
     private ICategoriaDAO categoriaDAO;
+    private String folder;
 
     @Override
     public void init() {
-        libroDAO = new LibroDAO("sqlite");
-        prestamoDAO = new PrestamoDAO("sqlite");
-        editorialDAO = new EditorialDAO("sqlite");
-        categoriaDAO = new CategoriaDAO("sqlite");
+        libroDAO = new LibroDAO("mysql");
+        prestamoDAO = new PrestamoDAO("mysql");
+        editorialDAO = new EditorialDAO("mysql");
+        categoriaDAO = new CategoriaDAO("mysql");
+        this.folder = getServletContext().getInitParameter("vistasPath");
     }
 
     // GET → listar libros o mostrar formulario
@@ -56,20 +58,22 @@ public class LibroServlet extends HttpServlet {
                 req.setAttribute("libros", libroDAO.listarTodos());
                 req.setAttribute("editoriales", editorialDAO.listarTodos());
                 req.setAttribute("categorias", categoriaDAO.listarTodos());
-                req.getRequestDispatcher("/libros.jsp").forward(req, res);
+                req.getRequestDispatcher(folder + "libros.jsp").forward(req, res);
             }
 
             case "editar" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 int id = Integer.parseInt(req.getParameter("id"));
                 libroDAO.buscarPorId(id).ifPresent(l -> req.setAttribute("libro", l));
                 req.setAttribute("editoriales", editorialDAO.listarTodos());
                 req.setAttribute("categorias", categoriaDAO.listarTodos());
-                req.getRequestDispatcher("/libros.jsp").forward(req, res);
+                req.getRequestDispatcher(folder + "libros.jsp").forward(req, res);
             }
 
             case "eliminar" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 int id = Integer.parseInt(req.getParameter("id"));
                 libroDAO.eliminar(id);
                 res.sendRedirect(req.getContextPath() + "/libros?action=listar");
@@ -91,7 +95,8 @@ public class LibroServlet extends HttpServlet {
         switch (action) {
 
             case "crear" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 Libro libro = construirDesdeForm(req);
                 boolean ok = libroDAO.insertar(libro);
                 String msg = ok ? "Libro creado correctamente" : "Error al crear el libro";
@@ -99,7 +104,8 @@ public class LibroServlet extends HttpServlet {
             }
 
             case "actualizar" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 int id = Integer.parseInt(req.getParameter("id"));
                 Libro libro = construirDesdeForm(req);
                 libro.setId(id);
@@ -135,10 +141,13 @@ public class LibroServlet extends HttpServlet {
                     Libro libro = optLibro.get();
                     libro.setEstado(EstadoLibro.PRESTADO);
                     libroDAO.actualizar(libro);
+                    res.sendRedirect(req.getContextPath() + "/prestamos?action=listar&msg=asignado_ok");
+                    return;
+                } else {
+                    res.sendRedirect(req.getContextPath() + "/libros?action=listar&msg=error_asignacion");
+                    return;
                 }
 
-                String msg = ok ? "Libro asignado correctamente" : "Error al asignar libro";
-                res.sendRedirect(req.getContextPath() + "/libros?action=listar&msg=" + msg);
             }
 
             default -> res.sendRedirect(req.getContextPath() + "/libros?action=listar");
@@ -163,12 +172,14 @@ public class LibroServlet extends HttpServlet {
     }
 
     /** Redirige a resumen si el usuario no es ADMIN o BIBLIOTECARIO */
-    private void soloAdminBibliotecario(HttpServletRequest req, HttpServletResponse res)
+    private boolean esAdminOBibliotecario(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
         Usuario usuario = (Usuario) req.getSession().getAttribute("usuarioActivo");
         RolUsuario rol = usuario.getRol();
         if (rol != RolUsuario.ADMINISTRADOR && rol != RolUsuario.BIBLIOTECARIO) {
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp?error=acceso_denegado");
+            res.sendRedirect(req.getContextPath() + "/resumen?error=acceso_denegado");
+            return false;
         }
+        return true;
     }
 }

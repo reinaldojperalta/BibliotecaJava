@@ -22,10 +22,12 @@ import sena.adso.model.enums.RolUsuario;
 public class DashboardServlet extends HttpServlet {
 
     private IUsuarioDAO usuarioDAO;
+    private String folder;
 
     @Override
     public void init() {
-        usuarioDAO = new UsuarioDAO("sqlite");
+        usuarioDAO = new UsuarioDAO("mysql");
+        this.folder = getServletContext().getInitParameter("vistasPath");
     }
 
     // GET → listar usuarios o mostrar formulario de edición
@@ -41,19 +43,26 @@ public class DashboardServlet extends HttpServlet {
 
             case "listar" -> {
                 req.setAttribute("usuarios", usuarioDAO.listarTodos());
-                req.getRequestDispatcher("/dashboard.jsp").forward(req, res);
+                req.getRequestDispatcher(folder + "dashboard.jsp").forward(req, res);
             }
 
             case "editar" -> {
                 int id = Integer.parseInt(req.getParameter("id"));
                 usuarioDAO.buscarPorId(id).ifPresent(u -> req.setAttribute("usuario", u));
-                req.getRequestDispatcher("/dashboard.jsp").forward(req, res);
+                req.getRequestDispatcher(folder + "dashboard.jsp").forward(req, res);
             }
 
             case "eliminar" -> {
+
                 int id = Integer.parseInt(req.getParameter("id"));
-                usuarioDAO.eliminar(id);
-                res.sendRedirect(req.getContextPath() + "/dashboard?action=listar");
+                Usuario actual = (Usuario) req.getSession().getAttribute("usuarioActivo");
+                if (actual.getId() == id) {
+                    res.sendRedirect(req.getContextPath() + "/dashboard?action=listar&msg=no_puedes_eliminarte");
+                    return;
+                } else {
+                    usuarioDAO.eliminar(id);
+                    res.sendRedirect(req.getContextPath() + "/dashboard?action=listar");
+                }
             }
 
             default -> res.sendRedirect(req.getContextPath() + "/dashboard?action=listar");

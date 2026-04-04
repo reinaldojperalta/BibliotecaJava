@@ -18,10 +18,13 @@ import sena.adso.model.Usuario;
 public class LoginServlet extends HttpServlet {
 
     private ILoginDAO loginDAO;
+    private String folder;
 
     @Override
     public void init() {
-        loginDAO = new LoginDAO("sqlite");
+        loginDAO = new LoginDAO("mysql");
+        this.folder = getServletContext().getInitParameter("vistasPath");
+
     }
 
     // GET → mostrar formulario de login
@@ -32,10 +35,10 @@ public class LoginServlet extends HttpServlet {
         // Si ya hay sesión activa, redirigir directo al resumen
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("usuarioActivo") != null) {
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp");
+            req.getRequestDispatcher(folder + "/resumen").forward(req, res);
             return;
         }
-        req.getRequestDispatcher("/login.jsp").forward(req, res);
+        req.getRequestDispatcher(folder + "/login.jsp").forward(req, res);
     }
 
     // POST → procesar credenciales
@@ -49,7 +52,7 @@ public class LoginServlet extends HttpServlet {
         // Validación básica de campos vacíos
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             req.setAttribute("error", "Email y contraseña son obligatorios");
-            req.getRequestDispatcher("/login.jsp").forward(req, res);
+            req.getRequestDispatcher(folder + "/login.jsp").forward(req, res);
             return;
         }
 
@@ -73,7 +76,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             System.out.println("Login fallido: No se encontró el usuario con esas credenciales.");
             req.setAttribute("error", "Credenciales incorrectas o usuario inactivo");
-            res.sendRedirect(req.getContextPath() + "/login?error=credenciales_invalidas");
+            req.getRequestDispatcher(folder + "login.jsp").forward(req, res);
         }
     }
 

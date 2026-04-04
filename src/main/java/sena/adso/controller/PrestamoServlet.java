@@ -33,12 +33,14 @@ public class PrestamoServlet extends HttpServlet {
     private IPrestamoDAO prestamoDAO;
     private IMultaDAO multaDAO;
     private ILibroDAO libroDAO;
+    private String folder;
 
     @Override
     public void init() {
-        prestamoDAO = new PrestamoDAO("sqlite");
-        multaDAO = new MultaDAO("sqlite");
-        libroDAO = new LibroDAO("sqlite");
+        prestamoDAO = new PrestamoDAO("mysql");
+        multaDAO = new MultaDAO("mysql");
+        libroDAO = new LibroDAO("mysql");
+        this.folder = getServletContext().getInitParameter("vistasPath");
     }
 
     // GET → listar según rol
@@ -65,18 +67,20 @@ public class PrestamoServlet extends HttpServlet {
                     req.setAttribute("prestamos", prestamoDAO.listarTodos());
                     req.setAttribute("multas", multaDAO.listarTodos());
                 }
-                req.getRequestDispatcher("/prestamos.jsp").forward(req, res);
+                req.getRequestDispatcher(folder + "prestamos.jsp").forward(req, res);
             }
 
             case "devolver" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 int idPrestamo = Integer.parseInt(req.getParameter("id"));
                 procesarDevolucion(idPrestamo);
                 res.sendRedirect(req.getContextPath() + "/prestamos?action=listar&msg=devolucion_ok");
             }
 
             case "eliminar" -> {
-                soloAdminBibliotecario(req, res);
+                if (!esAdminOBibliotecario(req, res))
+                    return;
                 int id = Integer.parseInt(req.getParameter("id"));
                 prestamoDAO.eliminar(id);
                 res.sendRedirect(req.getContextPath() + "/prestamos?action=listar");
@@ -91,7 +95,8 @@ public class PrestamoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
-        soloAdminBibliotecario(req, res);
+        if (!esAdminOBibliotecario(req, res))
+            return;
         String action = req.getParameter("action");
         if (action == null)
             action = "";
@@ -178,12 +183,12 @@ public class PrestamoServlet extends HttpServlet {
     }
 
     /** Redirige a resumen si el usuario no es ADMIN o BIBLIOTECARIO */
-    private void soloAdminBibliotecario(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
+    private boolean esAdminOBibliotecario(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Usuario usuario = (Usuario) req.getSession().getAttribute("usuarioActivo");
-        RolUsuario rol = usuario.getRol();
-        if (rol != RolUsuario.ADMINISTRADOR && rol != RolUsuario.BIBLIOTECARIO) {
-            res.sendRedirect(req.getContextPath() + "/resumen.jsp?error=acceso_denegado");
+        if (usuario.getRol() == RolUsuario.LECTOR) {
+            res.sendRedirect(req.getContextPath() + "/resumen?error=permiso_denegado");
+            return false; // Detener
         }
+        return true; // Continuar
     }
 }
