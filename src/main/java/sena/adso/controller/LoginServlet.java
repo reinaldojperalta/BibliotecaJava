@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             req.getRequestDispatcher(folder + "/resumen").forward(req, res);
             return;
         }
-        req.getRequestDispatcher(folder + "/login.jsp").forward(req, res);
+        req.getRequestDispatcher(folder + "login.jsp").forward(req, res);
     }
 
     // POST → procesar credenciales

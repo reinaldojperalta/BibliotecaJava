@@ -20,6 +20,6 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.invalidate(); // destruye la sesión y todos sus atributos
         }
-        res.sendRedirect(req.getContextPath() + "/login");
+        res.sendRedirect(req.getContextPath() + "/home");
     }
 }

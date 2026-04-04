@@ -27,7 +27,7 @@ import sena.adso.model.enums.RolUsuario;
 public class SesionFilter implements Filter {
 
     // Rutas que no requieren sesión
-    private static final String[] RUTAS_PUBLICAS = { "/login" };
+    private static final String[] RUTAS_PUBLICAS = { "/login", "", "/home" };
     // Rutas exclusivas de ADMIN
     private static final String[] RUTAS_ADMIN = {
             "/dashboard", "/DashboardServlet"
@@ -63,7 +63,7 @@ public class SesionFilter implements Filter {
 
         // 3. Sin sesión -> Redirigir a la URL del Servlet de login
         if (session == null || session.getAttribute("usuarioActivo") == null) {
-            res.sendRedirect(req.getContextPath() + "/login"); // Sin .jsp
+            res.sendRedirect(req.getContextPath() + "/home"); // Sin .jsp
             return;
         }
 
@@ -100,6 +100,10 @@ public class SesionFilter implements Filter {
     // -------------------------------------------------------------------------
 
     private boolean esRutaPublica(String ruta) {
+        // Si la ruta es nula o solo "/", la tratamos como pública
+        if (ruta == null || ruta.equals("/") || ruta.isEmpty()) {
+            return true;
+        }
         for (String publica : RUTAS_PUBLICAS) {
             if (ruta.equalsIgnoreCase(publica))
                 return true;

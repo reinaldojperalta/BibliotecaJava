@@ -81,7 +81,14 @@ public class PrestamoServlet extends HttpServlet {
             case "eliminar" -> {
                 if (!esAdminOBibliotecario(req, res))
                     return;
+
                 int id = Integer.parseInt(req.getParameter("id"));
+                Optional<Prestamo> optPrestamo = prestamoDAO.buscarPorId(id);
+                Prestamo p = optPrestamo.get();
+                libroDAO.buscarPorId(p.getIdLibro()).ifPresent(libro -> {
+                    libro.setEstado(EstadoLibro.DISPONIBLE);
+                    libroDAO.actualizar(libro);
+                });
                 prestamoDAO.eliminar(id);
                 res.sendRedirect(req.getContextPath() + "/prestamos?action=listar");
             }

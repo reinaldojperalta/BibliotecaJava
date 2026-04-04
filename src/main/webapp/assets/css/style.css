@@ -1,0 +1,340 @@
+/* ==========================================================================
+   1. VARIABLES Y RAÍZ
+   ========================================================================== */
+:root {
+    --gold-bright: #FFD700;
+    --gold-dark: #B8860B;
+    --gold-glow: rgba(255, 215, 0, 0.4);
+    --bg-dark: #000000;
+    --glass-bg: rgba(0, 0, 0, 0.75);
+    --font-main: 'Montserrat', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --studiova-gray: #7a7a7a; /* Gris metálico base */
+}
+
+/* ==========================================================================
+   2. CONFIGURACIÓN BASE Y UTILIDADES
+   ========================================================================== */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    
+    color: white !important;
+    font-family: var(--font-main);
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ocultar barra de scroll para IE, Edge y Firefox */
+body {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+a { text-decoration: none !important; }
+
+/* Tipografía y Colores Místicos */
+.text-gold { color: var(--gold-bright) !important; }
+.text-gray-metal { color: var(--studiova-gray) !important; }
+.font-mono { font-family: var(--font-mono); }
+.letter-spacing-5 { letter-spacing: 5px; }
+
+/* Efectos de Brillo (Glow) */
+.glow-text {
+    text-shadow: 0 0 15px var(--gold-glow);
+}
+
+.glow-box:hover {
+    box-shadow: 0 0 20px var(--gold-glow);
+    border-color: var(--gold-bright) !important;
+}
+
+/* ==========================================================================
+   3. LAYOUT PRINCIPAL (NAV, MAIN, FOOTER)
+   ========================================================================== */
+main {
+    position: relative;
+    z-index: 10;
+}
+
+/* Navbar Glassmorphism */
+.glass-nav {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    z-index: 1000;
+}
+
+.logo-text {
+    color: white;
+    font-weight: 800;
+    letter-spacing: 5px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+/* Footer Glassmorphism */
+.glass-footer {
+    background: rgba(10, 10, 10, 0.8);
+    border-top: 1px solid var(--studiova-gray);
+    padding: 60px 0 30px 0;
+}
+
+/* ==========================================================================
+   4. MENÚ DESPLEGABLE (DROPDOWN)
+   ========================================================================== */
+/* Botón Hamburguesa */
+.menu-trigger {
+    background: var(--studiova-gray) !important;
+    border-radius: 50%;
+    width: 45px; 
+    height: 45px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-trigger:hover {
+    background: var(--gold-dark) !important;
+    transform: rotate(90deg) scale(1.05);
+    box-shadow: 0 0 15px var(--gold-glow);
+}
+
+/* Caja del Menú */
+.studiova-dropdown {
+    background: rgba(10, 10, 10, 0.95) !important;
+    border: 1px solid var(--studiova-gray) !important;
+    border-radius: 15px !important;
+    min-width: 320px !important;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px var(--gold-glow) !important;
+}
+
+/* Enlaces del Menú */
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc !important;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 10px 0;
+    transition: all 0.3s;
+}
+
+.header-link:hover, .header-link.active {
+    color: var(--gold-bright) !important;
+    padding-left: 10px;
+    text-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* ==========================================================================
+   5. BOTONES GLOBALES
+   ========================================================================== */
+.btn-gold {
+    background: var(--gold-bright);
+    color: black;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-gold:hover {
+    background: white;
+    box-shadow: 0 0 20px var(--gold-glow);
+    transform: translateY(-2px);
+}
+
+.btn-outline-gray {
+    border: 1px solid var(--studiova-gray);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-outline-gray:hover {
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+}
+
+/* ==========================================================================
+   6. COMPONENTES DEL LOGIN
+   ========================================================================== */
+.studiova-wrapper {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    position: relative;
+    width: 380px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 4px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    overflow: hidden;
+}
+
+.card-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: var(--gold-glow);
+    filter: blur(60px);
+    pointer-events: none;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo-area h1 {
+    color: white;
+    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
+.sub-title {
+    color: var(--gold-dark);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+}
+
+/* Inputs del Login */
+.input-group { margin-bottom: 25px; }
+
+.input-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.input-wrapper { position: relative; }
+
+.input-wrapper input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 5px;
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.input-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold-bright);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-wrapper input:focus + .input-line {
+    width: 100%;
+}
+
+/* Botón principal del Login */
+.btn-studiova {
+    position: relative;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--gold-bright);
+    padding: 15px;
+    color: var(--gold-bright);
+    font-family: var(--font-main);
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.btn-studiova:hover {
+    background: var(--gold-bright);
+    color: black;
+    box-shadow: 0 0 20px var(--gold-glow);
+}
+
+/* Mensajes y Footer Login */
+.error-toast {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #ff6b6b;
+    font-size: 0.7rem;
+    padding: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-family: var(--font-mono);
+}
+
+.card-footer {
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+    text-align: center;
+}
+
+.card-footer p {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+}
+
+.card-footer span {
+    color: var(--gold-bright); /* Actualizado para coincidir con la paleta */
+}
+
+/* ==========================================================================
+   7. ESTADÍSTICAS Y ANIMACIONES
+   ========================================================================== */
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+}
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
