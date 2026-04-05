@@ -19,4 +19,6 @@ public interface IUsuarioDAO {
 
     Optional<Usuario> buscarPorDocumento(String documento);
 
+    int contarTotal();
+
 }

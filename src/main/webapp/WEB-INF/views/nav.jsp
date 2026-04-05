@@ -13,7 +13,7 @@
         <div class="d-flex align-items-center justify-content-between">
             
             <div class="logo">
-                <a href="<%= request.getContextPath() %>/index.jsp" class="d-flex align-items-center gap-2">
+                <a href="<%= request.getContextPath() %>/home" class="d-flex align-items-center gap-2">
                     
                     <span class="logo-text">ARS BIBLIOTECA</span>
                 </a>
@@ -39,8 +39,8 @@
                                 <span class="text-gray-metal font-mono" style="font-size: 0.75rem;">ÍNDICE DEL SISTEMA</span>
                             </div>
 
-                            <a href="<%= request.getContextPath() %>/login" class="header-link">
-                                <iconify-icon icon="solar:key-minimalistic-bold-duotone"></iconify-icon> Portal de Acceso (Login)
+                            <a href="<%= request.getContextPath() %>/" class="header-link">
+                                <iconify-icon icon="solar:key-minimalistic-bold-duotone"></iconify-icon> home
                             </a>
                             <a href="<%= request.getContextPath() %>/resumen" class="header-link">
                                 <iconify-icon icon="solar:widget-bold-duotone"></iconify-icon> Resumen

@@ -30,6 +30,12 @@ public class MultaDAO implements IMultaDAO {
     // -------------------------------------------------------------------------
     // SQL
     // -------------------------------------------------------------------------
+    private static final String SQL_SUMAR_PENDIENTES_POR_USUARIO = "SELECT SUM(m.monto) FROM multa m " +
+            "INNER JOIN prestamo p ON m.id_prestamo = p.id_prestamo " +
+            "WHERE p.id_usuario = ? AND m.estado = 'pendiente'";
+
+    private static final String SQL_SUMAR_PENDIENTES = "SELECT SUM(monto) FROM multa WHERE estado = 'pendiente'";
+
     private static final String SQL_INSERTAR = "INSERT INTO multa (id_prestamo, monto, fecha_generacion, fecha_pago, estado) "
             +
             "VALUES (?, ?, ?, ?, ?)";
@@ -200,6 +206,38 @@ public class MultaDAO implements IMultaDAO {
         return lista;
     }
 
+    @Override
+    public double sumarPendientes() {
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_SUMAR_PENDIENTES);
+                ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                double suma = rs.getDouble(1);
+                return rs.wasNull() ? 0.0 : suma;
+            }
+        } catch (SQLException e) {
+            System.err.println("[MultaDAO] Error al sumar: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    public double sumarPendientesPorUsuario(int idUsuario) {
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_SUMAR_PENDIENTES_POR_USUARIO)) {
+
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double suma = rs.getDouble(1);
+                    return rs.wasNull() ? 0.0 : suma;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[MultaDAO] Error al sumar por usuario: " + e.getMessage());
+        }
+        return 0.0;
+    }
     // -------------------------------------------------------------------------
     // Mapper privado — ResultSet → Multa
     // -------------------------------------------------------------------------

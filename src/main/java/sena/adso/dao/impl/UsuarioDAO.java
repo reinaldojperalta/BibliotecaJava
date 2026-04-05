@@ -32,6 +32,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         this.conexion = conexion;
     }
 
+    private static final String SQL_CONTAR_TOTAL = "SELECT COUNT(*) FROM usuario";
     private static final String SQL_INSERTAR = "INSERT INTO usuario (documento, nombres, apellidos, email, telefono, tipo_usuario, estado, password) "
             +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -154,6 +155,20 @@ public class UsuarioDAO implements IUsuarioDAO {
             System.err.println("[UsuarioDAO] Error al buscar por documento: " + e.getMessage());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public int contarTotal() {
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_CONTAR_TOTAL);
+                ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next())
+                return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("[UsuarioDAO] Error al contar: " + e.getMessage());
+        }
+        return 0;
     }
 
     private Usuario mapear(ResultSet rs) throws SQLException {

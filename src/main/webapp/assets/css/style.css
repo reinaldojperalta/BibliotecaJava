@@ -1,19 +1,19 @@
 /* ==========================================================================
-   1. VARIABLES Y RAÍZ
+   1. VARIABLES Y RAÍZ (Fusión con mejoras de contraste)
    ========================================================================== */
 :root {
     --gold-bright: #FFD700;
     --gold-dark: #B8860B;
     --gold-glow: rgba(255, 215, 0, 0.4);
-    --bg-dark: #000000;
-    --glass-bg: rgba(0, 0, 0, 0.75);
+    --glass-bg: rgba(0, 0, 0, 0.8);
     --font-main: 'Montserrat', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    --studiova-gray: #7a7a7a; /* Gris metálico base */
+    --studiova-gray: #d8d8d8; /* Gray claro de (1) - mejor lectura */
+    --text-muted: rgba(255, 255, 255, 0.6);
 }
 
 /* ==========================================================================
-   2. CONFIGURACIÓN BASE Y UTILIDADES
+   2. CONFIGURACIÓN BASE (Sin background - delegado a Matrix.css)
    ========================================================================== */
 body, html {
     margin: 0;
@@ -21,29 +21,44 @@ body, html {
     width: 100%;
     height: 100%;
     overflow-x: hidden;
-    
     color: white !important;
     font-family: var(--font-main);
-}
-body::-webkit-scrollbar {
-    display: none;
+    /* background-color ELIMINADO - gestionado por archivo Matrix externo */
 }
 
-/* Ocultar barra de scroll para IE, Edge y Firefox */
-body {
-    -ms-overflow-style: none;  /* IE y Edge */
-    scrollbar-width: none;  /* Firefox */
+/* Scrollbar oculta definitiva (fusión de ambos) */
+body { 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
+body::-webkit-scrollbar { 
+    display: none; 
 }
 
 a { text-decoration: none !important; }
+/* Ocultar scrollbar en el contenedor interno de DataTables */
+.dataTables_scrollBody {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;     /* Firefox */
+}
 
-/* Tipografía y Colores Místicos */
+.dataTables_scrollBody::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari y Opera */
+}
+
+/* Forzar que el wrapper no genere scroll exterior */
+.dataTables_wrapper {
+    overflow-x: hidden !important;
+}
+/* ==========================================================================
+   3. UTILIDADES Y TIPOGRAFÍA
+   ========================================================================== */
 .text-gold { color: var(--gold-bright) !important; }
 .text-gray-metal { color: var(--studiova-gray) !important; }
 .font-mono { font-family: var(--font-mono); }
 .letter-spacing-5 { letter-spacing: 5px; }
 
-/* Efectos de Brillo (Glow) */
+/* Efectos de Brillo */
 .glow-text {
     text-shadow: 0 0 15px var(--gold-glow);
 }
@@ -54,20 +69,21 @@ a { text-decoration: none !important; }
 }
 
 /* ==========================================================================
-   3. LAYOUT PRINCIPAL (NAV, MAIN, FOOTER)
+   4. LAYOUT PRINCIPAL (Nav mejorada con z-index de (1))
    ========================================================================== */
 main {
     position: relative;
     z-index: 10;
 }
 
-/* Navbar Glassmorphism */
+/* Navbar Glassmorphism - Fusión: estructura (base) + z-index/mejoras (1) */
 .glass-nav {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Borde más visible de (1) */
+    z-index: 9999 !important; /* Siempre arriba de todo - de (1) */
+    pointer-events: all;
 }
 
 .logo-text {
@@ -86,59 +102,63 @@ main {
 }
 
 /* ==========================================================================
-   4. MENÚ DESPLEGABLE (DROPDOWN)
+   5. MENÚ DESPLEGABLE (Fusión: animaciones base + visibilidad (1))
    ========================================================================== */
-/* Botón Hamburguesa */
+/* Botón Hamburguesa - Mejorado de (1) con transición suave de (base) */
 .menu-trigger {
-    background: var(--studiova-gray) !important;
+    background: rgba(255, 255, 255, 0.1) !important; /* Más glass de (1) */
+    border: 1px solid var(--gold-bright) !important; /* Borde visible dorado */
     border-radius: 50%;
     width: 45px; 
     height: 45px;
     display: flex; 
     align-items: center; 
     justify-content: center;
-    color: white;
+    color: var(--gold-bright) !important;
     font-size: 1.4rem;
-    border: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .menu-trigger:hover {
-    background: var(--gold-dark) !important;
-    transform: rotate(90deg) scale(1.05);
+    background: var(--gold-bright) !important;
+    color: black !important;
+    transform: rotate(90deg) scale(1.05); /* Escala de (base) */
     box-shadow: 0 0 15px var(--gold-glow);
 }
 
-/* Caja del Menú */
+/* Caja del Menú - Fusión: backdrop de (base) + borde de (1) */
 .studiova-dropdown {
-    background: rgba(10, 10, 10, 0.95) !important;
-    border: 1px solid var(--studiova-gray) !important;
+    background: rgba(10, 10, 10, 0.98) !important; /* Más opaco para contraste */
+    border: 1px solid var(--gold-bright) !important; /* Borde dorado visible */
     border-radius: 15px !important;
     min-width: 320px !important;
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px var(--gold-glow) !important;
+    z-index: 10000 !important; /* Encima de todo */
 }
 
-/* Enlaces del Menú */
+/* Enlaces del Menú - Mejorados de (1) con interacción de (base) */
 .header-link {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #ccc !important;
+    color: var(--studiova-gray) !important; /* Gris claro para lectura */
     font-family: var(--font-mono);
     font-size: 0.9rem;
-    padding: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
     transition: all 0.3s;
 }
 
 .header-link:hover, .header-link.active {
     color: var(--gold-bright) !important;
-    padding-left: 10px;
+    background: rgba(255, 215, 0, 0.05); /* Fondo sutil de (1) */
+    padding-left: 15px;
     text-shadow: 0 0 10px var(--gold-glow);
 }
 
 /* ==========================================================================
-   5. BOTONES GLOBALES
+   6. BOTONES GLOBALES (De base - más completos)
    ========================================================================== */
 .btn-gold {
     background: var(--gold-bright);
@@ -167,7 +187,23 @@ main {
 }
 
 /* ==========================================================================
-   6. COMPONENTES DEL LOGIN
+   7. COMPONENTES REUTILIZABLES (Nuevo de (1) - para refactorización futura)
+   ========================================================================== */
+.ars-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.ars-card:hover {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 20px var(--gold-glow);
+}
+
+/* ==========================================================================
+   8. COMPONENTES DEL LOGIN (De base - específicos y funcionales)
    ========================================================================== */
 .studiova-wrapper {
     position: relative;
@@ -318,11 +354,11 @@ main {
 }
 
 .card-footer span {
-    color: var(--gold-bright); /* Actualizado para coincidir con la paleta */
+    color: var(--gold-bright);
 }
 
 /* ==========================================================================
-   7. ESTADÍSTICAS Y ANIMACIONES
+   9. ESTADÍSTICAS Y ANIMACIONES (De base)
    ========================================================================== */
 .stat-number {
     font-size: 3.5rem;
@@ -338,3 +374,334 @@ main {
 .animate-spin-slow {
     animation: spin-slow 8s linear infinite;
 }
+
+/* ==========================================================================
+   10. VISTA: resumen.jsp (De (1) - específicos de página)
+   ========================================================================== */
+.resumen-main-content {
+    position: relative;
+    z-index: 10;
+    padding-top: 120px; /* Evita que la nav tape el contenido */
+    min-height: 100vh;
+}
+
+/* Títulos de los KPIs con Alto Contraste */
+.resumen-kpi-title {
+    color: white !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.resumen-kpi-value {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--gold-bright) !important;
+    text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.resumen-subtext {
+    color: var(--studiova-gray) !important;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+/* =========================================================
+   DATATABLES GLASS THEME - ARS BIBLIOTECA
+   Estandariza todas las tablas con efecto glassmorphism
+   ========================================================= */
+
+/* Wrapper general */
+.dataTables_wrapper {
+    font-family: 'JetBrains Mono', monospace;
+    color: #888;
+    font-size: 0.75rem;
+}
+
+/* Eliminar fondos planos de la tabla */
+table.dataTable.table-dark {
+    --bs-table-bg: transparent !important;
+    --bs-table-color: #fff;
+    --bs-table-border-color: transparent;
+    border-collapse: separate !important;
+    border-spacing: 0 6px !important;
+}
+
+/* Header de la tabla */
+table.dataTable thead th {
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201, 176, 55, 0.3) !important;
+    color: #c9b037 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.7rem;
+    padding: 12px;
+}
+
+/* Filas con efecto Glass */
+table.dataTable tbody tr {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(201, 176, 55, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+}
+
+/* Hover efecto glass más intenso */
+table.dataTable tbody tr:hover {
+    background: rgba(201, 176, 55, 0.08) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(201, 176, 55, 0.4) !important;
+    transform: translateX(5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 15px rgba(201, 176, 55, 0.1);
+}
+
+/* Quitar zebra striping (alternancia de colores) */
+table.dataTable tbody tr.odd,
+table.dataTable tbody tr.even {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Celdas */
+table.dataTable tbody td {
+    background: transparent !important;
+    border: none !important;
+    padding: 12px 8px;
+}
+
+/* Primera celda de cada fila (borde redondeado izquierdo) */
+table.dataTable tbody td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding-left: 16px !important;
+}
+
+/* Última celda de cada fila (borde redondeado derecho) */
+table.dataTable tbody td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-right: 16px !important;
+}
+
+/* Paginación */
+.dataTables_paginate {
+    margin-top: 20px !important;
+    text-align: center !important;
+}
+
+.paginate_button {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(201, 176, 55, 0.2) !important;
+    color: #888 !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    margin: 0 3px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+}
+
+.paginate_button:hover {
+    background: rgba(201, 176, 55, 0.2) !important;
+    border-color: #c9b037 !important;
+    color: #c9b037 !important;
+    transform: translateY(-2px);
+}
+
+.paginate_button.current {
+    background: rgba(201, 176, 55, 0.3) !important;
+    border-color: #c9b037 !important;
+    color: #c9b037 !important;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(201, 176, 55, 0.3);
+}
+
+.paginate_button.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Buscador */
+.dataTables_filter input {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(201, 176, 55, 0.3) !important;
+    border-radius: 6px !important;
+    color: #c9b037 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding: 6px 12px !important;
+    margin-left: 10px !important;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.dataTables_filter input:focus {
+    outline: none !important;
+    border-color: #c9b037 !important;
+    box-shadow: 0 0 10px rgba(201, 176, 55, 0.2);
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.dataTables_filter label {
+    color: #888 !important;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+/* Selector de cantidad de registros */
+.dataTables_length select {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(201, 176, 55, 0.3) !important;
+    border-radius: 6px !important;
+    color: #c9b037 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding: 4px 8px !important;
+    backdrop-filter: blur(5px);
+}
+
+.dataTables_length label {
+    color: #888 !important;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+/* Info de registros */
+.dataTables_info {
+    color: #666 !important;
+    font-size: 0.7rem !important;
+    margin-top: 15px !important;
+    font-family: 'JetBrains Mono', monospace;
+}
+/* Hero Section */
+.hero-home {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title-home {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: linear-gradient(135deg, #fff 0%, var(--gold-bright) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Stats Cards */
+.stat-card-home {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(201, 176, 55, 0.15);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stat-card-home:hover {
+    transform: translateY(-10px);
+    border-color: var(--gold-bright);
+    box-shadow: 0 20px 40px rgba(201, 176, 55, 0.2);
+}
+
+/* Feature Cards */
+.feature-card-home {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    transition: all 0.4s ease;
+}
+
+.feature-card-home:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-5px);
+}
+
+/* Book Cards */
+.book-card-home {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 2/3;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.4s ease;
+}
+
+.book-card-home:hover {
+    transform: translateY(-10px);
+    border-color: var(--gold-bright);
+    box-shadow: 0 20px 40px rgba(201, 176, 55, 0.2);
+}
+
+/* Animaciones */
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+@keyframes pulseGlow {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+/* Botones específicos home */
+.btn-gold-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, var(--gold-bright), #B8860B);
+    color: #000;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(201, 176, 55, 0.3);
+}
+
+.btn-gold-large:hover {
+    background: transparent;
+    color: var(--gold-bright);
+    border-color: var(--gold-bright);
+    transform: translateY(-3px);
+}
+
+.btn-outline-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    color: var(--gold-bright);
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--gold-bright);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-gold:hover {
+    background: var(--gold-bright);
+    color: #000;
+    transform: translateY(-3px);
+}
+
+/* Sorting icons personalizados (flechas doradas) */

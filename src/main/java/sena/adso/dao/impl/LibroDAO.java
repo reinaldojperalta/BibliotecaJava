@@ -29,6 +29,11 @@ public class LibroDAO implements ILibroDAO {
     // -------------------------------------------------------------------------
     // SQL
     // -------------------------------------------------------------------------
+
+    private static final String SQL_CONTAR_TOTAL = "SELECT COUNT(*) FROM libro";
+
+    private static final String SQL_LISTAR_RECIENTES = "SELECT * FROM libro ORDER BY id_libro DESC LIMIT ?";
+
     private static final String SQL_INSERTAR = "INSERT INTO libro (titulo, isbn, anio_publicacion, num_paginas, " +
             "                   id_editorial, id_categoria, estado) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -216,6 +221,37 @@ public class LibroDAO implements ILibroDAO {
 
         } catch (SQLException e) {
             System.err.println("[LibroDAO] Error al listar por estado: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    @Override
+    public int contarTotal() {
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_CONTAR_TOTAL);
+                ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next())
+                return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] Error al contar: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Libro> listarRecientes(int limite) {
+        List<Libro> lista = new ArrayList<>();
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_LISTAR_RECIENTES)) {
+
+            ps.setInt(1, limite);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next())
+                    lista.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("[LibroDAO] Error al listar recientes: " + e.getMessage());
         }
         return lista;
     }

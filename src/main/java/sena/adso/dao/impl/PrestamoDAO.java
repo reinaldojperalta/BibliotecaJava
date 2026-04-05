@@ -30,6 +30,8 @@ public class PrestamoDAO implements IPrestamoDAO {
     // -------------------------------------------------------------------------
     // SQL
     // -------------------------------------------------------------------------
+    private static final String SQL_CONTAR_POR_ESTADO = "SELECT COUNT(*) FROM prestamo WHERE estado = ?";
+
     private static final String SQL_INSERTAR = "INSERT INTO prestamo (id_libro, id_usuario, fecha_prestamo, " +
             "                      fecha_devolucion_esperada, fecha_devolucion_real, estado) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
@@ -217,6 +219,26 @@ public class PrestamoDAO implements IPrestamoDAO {
             System.err.println("[PrestamoDAO] Error al listar activos por libro: " + e.getMessage());
         }
         return lista;
+    }
+
+    public int contarPorEstado(String estado) {
+        try (Connection con = conexion.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_CONTAR_POR_ESTADO)) {
+
+            ps.setString(1, estado);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next())
+                    return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("[PrestamoDAO] Error al contar: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public int contarActivos() {
+        return contarPorEstado("activo");
     }
 
     // -------------------------------------------------------------------------
